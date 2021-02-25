@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "330487121830",
+    "firebase_url": "https://daybyday-385fc-default-rtdb.firebaseio.com",
+    "project_id": "daybyday-385fc",
+    "storage_bucket": "daybyday-385fc.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:330487121830:android:e76a317300520680db3167",
+        "android_client_info": {
+          "package_name": "com.example.daybyday"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "330487121830-1g57n5u8tq55qhdsqg1po59abmdt759h.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBylWEbatggoX_gVsGWiA6YW921F4nFbOI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "330487121830-1g57n5u8tq55qhdsqg1po59abmdt759h.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "330487121830-0p30krqh95g1t702ios1n1vetuafueei.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.daybyday"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
