@@ -170,6 +170,7 @@ class _AllPostsState extends State<AllPosts> {
 
                                 Navigator.push(context,
                                   MaterialPageRoute(
+                                      settings: RouteSettings(name: "/screen1"),
                                       builder: (context) => DailyPosts()),
                                 );
 

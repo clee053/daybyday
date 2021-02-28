@@ -1,4 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:daybyday/mainpages/AllPosts.dart';
+import 'package:daybyday/navigation/NavigationBar.dart';
 import 'package:daybyday/postpages/EditPost.dart';
 import 'package:daybyday/postpages/OpenPost.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -24,7 +26,24 @@ class _DailyPostsState extends State<DailyPosts> {
 
     return Scaffold(
       appBar: AppBar(
-        title: new Text("View Posts By Date"),),
+        title: new Text("View Posts By Date"),
+
+        actions: [
+
+          FlatButton(onPressed: (){
+            Navigator.push(context,
+              MaterialPageRoute(builder: (context) =>
+                  NavigationBar()),
+            );
+          }, child: Text('Back',
+            style: TextStyle(
+                color: Colors.white
+            ),),
+          ),
+        ],
+
+
+      ),
 
       body: StreamBuilder(
         stream: view.snapshots(),
@@ -41,7 +60,9 @@ class _DailyPostsState extends State<DailyPosts> {
 
                       GestureDetector(
                         onTap: (){
-                          Navigator.push(context, MaterialPageRoute(builder: (_)=>OpenPost(docToOpen: snapshot.data.docs[index],)));
+                          Navigator.push(context, MaterialPageRoute(
+                              settings: RouteSettings(name: "/screen3"),
+                              builder: (_)=>OpenPost(docToOpen: snapshot.data.docs[index],)));
                         },
 
                         child: Card(

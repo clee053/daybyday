@@ -1,17 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:daybyday/navigation/NavigationBar.dart';
 import 'package:daybyday/services/auth.dart';
 import 'package:daybyday/shared/loading.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 
-import 'StartPage.dart';
-
-
-class SignUpPage extends StatefulWidget {
+class CreateAccount extends StatefulWidget {
   @override
-  _SignUpPageState createState() => _SignUpPageState();
+  _CreateAccountState createState() => _CreateAccountState();
 }
 
-class _SignUpPageState extends State<SignUpPage> {
-
+class _CreateAccountState extends State<CreateAccount> {
   TextEditingController _nameController = TextEditingController();
   TextEditingController _emailController = TextEditingController();
   TextEditingController _passwordController = TextEditingController();
@@ -23,7 +22,7 @@ class _SignUpPageState extends State<SignUpPage> {
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   String email, password, name;
   String errormessage;
-  bool loading = false;
+
 
 
 //  checkAuthentification() async
@@ -93,7 +92,7 @@ class _SignUpPageState extends State<SignUpPage> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
-    return loading ? Loading() :   Scaffold(
+    return Scaffold(
 
       body: SingleChildScrollView(
         child: Container(
@@ -164,12 +163,12 @@ class _SignUpPageState extends State<SignUpPage> {
                               SizedBox(height: 10.0),
                               Container(
                                 child: TextFormField(
-                                  validator: (value)
-                                  {
-                                    if(value.isEmpty){
-                                      return 'Enter email';}
-                                    return null;
-                                  },
+                                    validator: (value)
+                                    {
+                                      if(value.isEmpty){
+                                        return 'Enter email';}
+                                      return null;
+                                    },
                                     controller: _emailController,
                                     decoration: InputDecoration(
                                       labelText: 'Email',
@@ -186,19 +185,19 @@ class _SignUpPageState extends State<SignUpPage> {
                               Container(
                                 child: TextFormField(
 
-                                  validator: (value)
-                                  {
-                                    if(value.length < 7){
-                                      return 'Password must be more than 7 letters long';}
-                                    return null;
-                                  },
+                                    validator: (value)
+                                    {
+                                      if(value.length < 7){
+                                        return 'Password must be more than 7 letters long';}
+                                      return null;
+                                    },
                                     controller: _passwordController,
                                     decoration: InputDecoration(
                                       labelText: 'Password',
                                       prefixIcon:Icon(Icons.lock),
                                     ),
                                     obscureText: true,
-                                  onChanged: (input) => password = input
+                                    onChanged: (input) => password = input
 
 
                                 ),
@@ -239,43 +238,28 @@ class _SignUpPageState extends State<SignUpPage> {
                                 children: <Widget>[
 
                                   RaisedButton(
-                                    padding: EdgeInsets.only(left:30, right:30),
-                                    onPressed: (){
-                                      Navigator.push(context, MaterialPageRoute(builder: (context)=> StartPage()));
-                                    },
-                                    child: Text('BACK',
-                                      style: TextStyle(
-                                        fontSize: 20.0,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.white,
-                                      ),
-                                    ),
-
-                                    color: Colors.blue,
-
-                                  ),
-
-                                  SizedBox(width: 30.0),
-
-                                  RaisedButton(
                                     padding: EdgeInsets.only(left:25, right:25),
                                     onPressed: () async {
+                                      var user =  FirebaseAuth.instance.currentUser;
                                       if (_formKey.currentState.validate()) {
-                                        setState(() => loading = true);
-                                        dynamic result = await _auth.createUserWithEmailAndPassword(email, password, name);
-                                        if (result == null) {
-                                          setState(() {
-                                            errormessage = 'Please fill in all fields properly.';
-                                            loading = false;
-                                          });
 
-                                          showError(errormessage);
+                                        FirebaseFirestore.instance.collection("users").doc(user.uid).update({
+                                          'name': name,
+                                          'email': email,
+                                        });
 
+                                       await _auth.createAnon(email, password, name).whenComplete(() => Navigator.push(context, MaterialPageRoute(builder: (context)=> NavigationBar())));
 
-                                        }
+                                        // if (result == null) {
+                                        //   setState(() {
+                                        //     errormessage = 'Please fill in all fields properly.';
+                                        //
+                                        //   });
+                                        //   showError(errormessage);
+                                        // }
                                       }
                                     },
-                                    child: Text('SIGN UP',
+                                    child: Text('Create Account',
                                       style: TextStyle(
                                         fontSize: 20.0,
                                         fontWeight: FontWeight.bold,

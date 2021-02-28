@@ -1,3 +1,4 @@
+import 'package:daybyday/services/auth.dart';
 import 'package:flutter/material.dart';
 
 class IdeasPage extends StatefulWidget {
@@ -6,6 +7,7 @@ class IdeasPage extends StatefulWidget {
 }
 
 class _IdeasPageState extends State<IdeasPage> {
+  final AuthService _auth = AuthService();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,6 +28,24 @@ class _IdeasPageState extends State<IdeasPage> {
 
                     Image(image: AssetImage('assets/applogo.png'),
                     height: 300,),
+
+                    ButtonTheme(
+                      minWidth: 300.0,
+                      height: 50.0,
+                      buttonColor: Colors.blue[50],
+                      child: RaisedButton(
+                        onPressed: () async {
+                          await _auth.signOut();
+                        },
+                        child: Text('Sign out',
+                          style: TextStyle(
+                            fontSize: 20.0,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+
+                      ),
+                    ),
 
                   ],
 

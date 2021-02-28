@@ -8,6 +8,10 @@ import 'EditPost.dart';
 import 'package:intl/intl.dart';
 
 class ViewPosts extends StatefulWidget {
+  // get docindex => null;
+
+
+
   @override
   _ViewPostsState createState() => _ViewPostsState();
 }
@@ -16,6 +20,8 @@ class _ViewPostsState extends State<ViewPosts> {
 
   @override
   Widget build(BuildContext context) {
+
+    // var docindex;
 
     var useruid = FirebaseAuth.instance.currentUser.uid;
     final postref = FirebaseFirestore.instance.collection('users').doc(useruid).collection('posts');
@@ -44,6 +50,9 @@ class _ViewPostsState extends State<ViewPosts> {
 //              show all posts. if there are no posts, it will show 0
                 itemBuilder: (_, index){
                   DateTime myDateTime = (snapshot.data.docs[index].data()['actualdate']).toDate();
+                  // setState(() {
+                  //   docindex = index;
+                  // });
 
 
 
@@ -51,6 +60,8 @@ class _ViewPostsState extends State<ViewPosts> {
                 onTap: (){
                   Navigator.push(context, MaterialPageRoute(builder: (_)=>OpenPost(docToOpen: snapshot.data.docs[index],)));
                 },
+
+
                 child: Container(
                  margin: EdgeInsets.all(15),
                   width: 300,

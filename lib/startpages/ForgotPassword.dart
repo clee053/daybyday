@@ -118,124 +118,136 @@ class _ForgotPasswordState extends State<ForgotPassword> {
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+
     return Scaffold(
         body: SingleChildScrollView(
-          child: Column(
-            children: <Widget> [
-              Container(
-                child: Container(
-                  width: double.infinity,
-                  height: 300.0,
+          child: Container(
+            width: width,
+            height: height,
+            decoration: BoxDecoration(
+                gradient: LinearGradient(
+                    begin: Alignment.topRight,
+                    end: Alignment.bottomLeft,
+                    colors: [Colors.indigo[200], Colors.white70])),
+            child: Column(
+              children: <Widget> [
+                Container(
+                  child: Container(
+                    width: double.infinity,
+                    height: 300.0,
 
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
 
-                        SizedBox(height: 50.0),
-                        Container(
-                          child: Image (image: AssetImage('assets/applogo.png'),height: 230,),
-                        ),
-                        SizedBox(height: 20.0),
+                          SizedBox(height: 50.0),
+                          Container(
+                            child: Image (image: AssetImage('assets/applogo.png'),height: 230,),
+                          ),
+                          SizedBox(height: 20.0),
 
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
 
-              Container(
-                child: Container(
-                  width: double.infinity,
-                  height: 400.0,
+                Container(
+                  child: Container(
+                    width: double.infinity,
+                    height: 400.0,
 
-                  child: Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: <Widget>[
+                    child: Center(
+                      child: Column(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: <Widget>[
 
-                        Form(
-                          key: _formKey,
-                          child: Column (
-                            children: <Widget>[
-                              Container(
-                                child: TextFormField(
-                                  // ignore: missing_return
-                                  validator: (input)
+                          Form(
+                            key: _formKey,
+                            child: Column (
+                              children: <Widget>[
+                                Container(
+                                  child: TextFormField(
+                                    // ignore: missing_return
+                                    validator: (input)
 
-                                  {
-                                    if(input.isEmpty)
-                                      return 'Enter Email';
-                                  },
+                                    {
+                                      if(input.isEmpty)
+                                        return 'Enter Email';
+                                    },
 
-                                  decoration: InputDecoration(
-                                    labelText: 'Email',
-                                    prefixIcon:Icon(Icons.email),
-                                  ),
+                                    decoration: InputDecoration(
+                                      labelText: 'Email',
+                                      prefixIcon:Icon(Icons.email),
+                                    ),
 //
-                                  onChanged: (input) => _email = input,
+                                    onChanged: (input) => _email = input,
 
 
-                                ),
-                              ),
-
-                              SizedBox(height: 30.0),
-
-                              ButtonTheme(
-                                minWidth: 280.0,
-                                height: 40.0,
-
-                                child: RaisedButton(
-                                  onPressed: ()  {
-                                    resetPassword(context);
-                                  },
-
-                                  child: Text('Reset Password',
-                                    style: TextStyle(
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
-                                    ),
                                   ),
-
-                                  color: Colors.blue,
-
                                 ),
-                              ),
 
-                              ButtonTheme(
-                                minWidth: 280.0,
-                                height: 40.0,
+                                SizedBox(height: 30.0),
 
-                                child: FlatButton(
-                                  onPressed: (){
-                                    Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginPage()));
-                                  },
+                                ButtonTheme(
+                                  minWidth: 280.0,
+                                  height: 40.0,
 
-                                  child: Text('Back to Log In',
-                                    style: TextStyle(
-                                      fontSize: 13.0,
-                                      color: Colors.black,
+                                  child: RaisedButton(
+                                    onPressed: ()  {
+                                      resetPassword(context);
+                                    },
+
+                                    child: Text('Reset Password',
+                                      style: TextStyle(
+                                        fontSize: 20.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
                                     ),
+
+                                    color: Colors.blue,
+
                                   ),
-
-
-
                                 ),
-                              ),
 
-                            ],
+                                ButtonTheme(
+                                  minWidth: 280.0,
+                                  height: 40.0,
+
+                                  child: FlatButton(
+                                    onPressed: (){
+                                      Navigator.push(context, MaterialPageRoute(builder: (context)=> LoginPage()));
+                                    },
+
+                                    child: Text('Back to Log In',
+                                      style: TextStyle(
+                                        fontSize: 13.0,
+                                        color: Colors.black,
+                                      ),
+                                    ),
+
+
+
+                                  ),
+                                ),
+
+                              ],
+                            ),
+
                           ),
 
-                        ),
-
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),
-              ),
 
-            ],
+              ],
+            ),
           ),
 
         ),

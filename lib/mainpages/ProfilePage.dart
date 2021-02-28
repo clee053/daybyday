@@ -3,6 +3,8 @@ import 'dart:io';
 import 'package:daybyday/SettingPage.dart';
 import 'package:daybyday/postpages/ViewPosts.dart';
 import 'package:daybyday/services/auth.dart';
+import 'package:daybyday/startpages/CreateAccount.dart';
+
 
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -22,9 +24,14 @@ class ProfilePage extends StatefulWidget {
 }
 
 class _ProfilePageState extends State<ProfilePage> {
+
   final AuthService _auth = AuthService();
   String imageUrl;
   String useremail;
+
+  navigateToCreateAccount()async{
+    Navigator.push(context, MaterialPageRoute(builder: (context)=> CreateAccount()));
+  }
 
 
   @override
@@ -189,7 +196,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             )
                             : CircleAvatar(
                               radius: 50,
-                              backgroundImage: AssetImage('assets/somin.png'),
+                              backgroundImage: AssetImage('assets/faces/happy.png'),
                             ),
                             SizedBox(height: 10),
                             Text(
@@ -323,7 +330,63 @@ class _ProfilePageState extends State<ProfilePage> {
                               height: 10.0,
                             ),
 
-                            ButtonTheme(
+                            (user['email'] == null)
+
+                            ?ButtonTheme(
+                              minWidth: 300.0,
+                              height: 50.0,
+                              buttonColor: Colors.blue[50],
+                              child: RaisedButton(
+                                onPressed: ()  {
+                                  return showDialog(
+                                      context: context,
+                                      builder: (context) {
+                                        return AlertDialog(
+                                          title: Text('Create a new account?'),
+                                          content: Text(
+                                              'You can save your posts and sign back in any time!'
+                                          ),
+
+                                          actions: <Widget>[
+                                            FlatButton(
+                                              // color: Colors.blue[50],
+                                              // textColor: Colors.white,
+                                              child: Text('Cancel'),
+                                              onPressed: () {
+                                                setState(() {
+                                                  Navigator.pop(context);
+                                                });
+                                              },
+                                            ),
+                                            FlatButton(
+                                              // color: Colors.blue,
+                                              // textColor: Colors.white,
+                                              child: Text('Yes'),
+                                              onPressed: () async {
+                                               navigateToCreateAccount();
+                                              },
+                                            ),
+                                          ],
+                                        );
+
+
+
+                                      });
+                                  // resetPassword(context);
+                                },
+                                child: Text('Create Account',
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold,
+
+                                  ),
+                                ),
+                              ),
+                            )
+
+
+
+                            : ButtonTheme(
                               minWidth: 300.0,
                               height: 50.0,
                               buttonColor: Colors.blue[50],
