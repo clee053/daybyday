@@ -35,13 +35,13 @@ class MyApp extends StatelessWidget {
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
         home: Wrapper(),
-        routes: <String, WidgetBuilder> {
-
-          '/screen1' : (BuildContext context) => new DailyPosts(),
-          '/screen2' : (BuildContext context) => new ViewPosts(),
-          '/screen3' : (BuildContext context) => new OpenPost(),
-          '/screen4' : (BuildContext context) => new EditPost(),
-        },
+        // routes: <String, WidgetBuilder> {
+        //
+        //   '/screen1' : (BuildContext context) => new AllPosts(),
+        //   '/screen2' : (BuildContext context) => new DailyPosts(),
+        //   '/screen3' : (BuildContext context) => new OpenPost(),
+        //   '/screen4' : (BuildContext context) => new EditPost(),
+        // },
 
 
       ),

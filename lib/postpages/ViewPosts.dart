@@ -47,6 +47,8 @@ class _ViewPostsState extends State<ViewPosts> {
           return ListView.builder(
 //            child: GridView.builder(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1),
                 itemCount: snapshot.hasData?snapshot.data.docs.length: 0,
+
+
 //              show all posts. if there are no posts, it will show 0
                 itemBuilder: (_, index){
                   DateTime myDateTime = (snapshot.data.docs[index].data()['actualdate']).toDate();
@@ -58,7 +60,10 @@ class _ViewPostsState extends State<ViewPosts> {
 
               return GestureDetector(
                 onTap: (){
-                  Navigator.push(context, MaterialPageRoute(builder: (_)=>OpenPost(docToOpen: snapshot.data.docs[index],)));
+                  Navigator.push(context, MaterialPageRoute(
+                      settings: RouteSettings(name: "/screen3"),
+
+                      builder: (_)=>OpenPost(docToOpen: snapshot.data.docs[index],)));
                 },
 
 

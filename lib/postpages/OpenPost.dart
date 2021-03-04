@@ -59,7 +59,7 @@ class _OpenPostState extends State<OpenPost> {
 
           FlatButton(onPressed: (){
             Navigator.push(context, MaterialPageRoute(
-                settings: RouteSettings(name: "/screen4"),
+                // settings: RouteSettings(name: "/screen4"),
                 builder: (_)=>EditPost(docToEdit: widget.docToOpen,)));
           }, child: Text('Edit',
             style: TextStyle(
@@ -69,6 +69,7 @@ class _OpenPostState extends State<OpenPost> {
 
           FlatButton(onPressed: (){
             widget.docToOpen.reference.delete().whenComplete(() => Navigator.pop(context));
+
           }, child: Text('Delete',
             style: TextStyle(
                 color: Colors.white

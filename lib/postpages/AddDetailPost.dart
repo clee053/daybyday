@@ -166,10 +166,14 @@ class _AddDetailPostState extends State<AddDetailPost> {
           FlatButton(onPressed: () async {
 
             var user =  FirebaseAuth.instance.currentUser;
+            final data = FirebaseFirestore.instance.collection("users").doc(user.uid).collection('posts');
 
-            var dateYear = selectedDate.year;
-            var dateMonth = selectedDate.month;
-            var dateDay = selectedDate.day;
+            var dateYear = selectedDate.year.toString();
+            var dateMonth = DateFormat.MMMM().format(selectedDate);
+            var dateDay = selectedDate.day.toString();
+            var actualDate = DateFormat.yMMMd().format(selectedDate);
+
+
 
             // final _storage = FirebaseStorage.instance;
             //
@@ -180,7 +184,7 @@ class _AddDetailPostState extends State<AddDetailPost> {
             //   var snapshot = await _storage.ref()
             //       .child('$user/post/${DateTime.now()}')
             //       .putFile(fileUpload);
-            //
+            // //
             //   var downloadUrl = await snapshot.ref.getDownloadURL();
             //
             //   // await FirebaseFirestore.instance.collection("users").doc(useruid).collection('posts').add({'profilepicture': downloadUrl});
@@ -196,15 +200,17 @@ class _AddDetailPostState extends State<AddDetailPost> {
 
 
             //get the current UID, which is already in use, this will help also with the anonymous posts
-            FirebaseFirestore.instance.collection("users").doc(user.uid).collection('posts').add({
+            data.add({
               'title': title.text,
               'content': content.text,
               'posttime' : FieldValue.serverTimestamp(),
               'actualdate': selectedDate,
-              'year': dateYear.toString(),
-              'month': dateMonth.toString(),
-              'day': dateDay.toString(),
+              'year': dateYear,
+              'month': dateMonth,
+              'day': dateDay,
               'postimage': imageUrl,
+              'searchdate': actualDate,
+
             }).whenComplete(() => Navigator.pop(context));
           }, child: Text('Save')),
         ],

@@ -72,6 +72,10 @@ class _HomePageState extends State<HomePage> {
 
   @override
   Widget build(BuildContext context) {
+
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+
     var useruid = FirebaseAuth.instance.currentUser.uid;
     final userref = FirebaseFirestore.instance.collection('users').doc(useruid);
 
@@ -98,8 +102,8 @@ class _HomePageState extends State<HomePage> {
                   Container(
                     child: Container(
                       color: Colors.pink[50],
-                      width: double.infinity,
-                      height: 500.0,
+                      width: width,
+                      height: height*0.55,
                       child: Center(
                         child: Column(
 
@@ -107,17 +111,21 @@ class _HomePageState extends State<HomePage> {
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
 
+                            SizedBox(
+                              height: 10.0,
+                            ),
+
                             (user['profilepicture'] != null)
                                 ? CircleAvatar(
-                              radius: 100,
+                              radius: height*0.15,
                               backgroundImage: NetworkImage('${user['profilepicture']}'),
                             )
                                 : CircleAvatar(
-                              radius: 100,
+                              radius: height*0.15,
                               backgroundImage: AssetImage('assets/faces/happy.png'),
                             ),
                             SizedBox(
-                              height: 30.0,
+                              height: 20.0,
                             ),
 //
                             Text(
@@ -129,22 +137,14 @@ class _HomePageState extends State<HomePage> {
                               ),
                             ),
                             SizedBox(
-                              height: 30.0,
+                              height: 20.0,
                             ),
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.center,
-                              children: <Widget>[
-
-                                Text(
-                                  "$formatdate \n $formattime",
-                                  textAlign: TextAlign.center,
-                                  style: TextStyle(
-                                      fontSize: 22.0
-                                  ),
-                                ),
-
-
-                              ],
+                            Text(
+                              "$formatdate \n $formattime",
+                              textAlign: TextAlign.center,
+                              style: TextStyle(
+                                  fontSize: 22.0
+                              ),
                             ),
 
 
@@ -157,7 +157,7 @@ class _HomePageState extends State<HomePage> {
                   Container(
                     child: Center(
                       child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.start,
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: <Widget>[
                           SizedBox(
@@ -226,6 +226,10 @@ class _HomePageState extends State<HomePage> {
                                 ),
                               ),
                             ),
+                          ),
+
+                          SizedBox(
+                            height: 30.0,
                           ),
 
 

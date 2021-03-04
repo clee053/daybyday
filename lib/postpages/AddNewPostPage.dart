@@ -61,22 +61,28 @@ class _AddNewPostPageState extends State<AddNewPostPage> {
           FlatButton(onPressed: () {
 
             var user =  FirebaseAuth.instance.currentUser;
+            final data = FirebaseFirestore.instance.collection("users").doc(user.uid).collection('posts');
 
-            var dateYear = selectedDate.year;
-            var dateMonth = selectedDate.month;
-            var dateDay = selectedDate.day;
+            var dateYear = selectedDate.year.toString();
+            var dateMonth = DateFormat.MMMM().format(selectedDate);
+            var dateDay = selectedDate.day.toString();
+            var actualDate = DateFormat.yMMMd().format(selectedDate);
+
 
             //get the current UID, which is already in use, this will help also with the anonymous posts
-            FirebaseFirestore.instance.collection("users").doc(user.uid).collection('posts').add({
+            data.add({
               'title': title.text,
               'content': content.text,
               'posttime' : FieldValue.serverTimestamp(),
               'actualdate': selectedDate,
-              'year': dateYear.toString(),
-              'month': dateMonth.toString(),
-              'day': dateDay.toString(),
+              'year': dateYear,
+              'month': dateMonth,
+              'day': dateDay,
+              'searchdate': actualDate,
 
             }
+
+
 
 
 

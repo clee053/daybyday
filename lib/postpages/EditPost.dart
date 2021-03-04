@@ -178,21 +178,24 @@ class _EditPostState extends State<EditPost> {
 
         actions: [
           FlatButton(onPressed: (){
-            var user =  FirebaseAuth.instance.currentUser;
-            var dateYear = selectedDate.year;
-            var dateMonth = selectedDate.month;
-            var dateDay = selectedDate.day;
+
+            var dateYear = selectedDate.year.toString();
+            var dateMonth = DateFormat.MMMM().format(selectedDate);
+            var dateDay = selectedDate.day.toString();
+            var actualDate = DateFormat.yMMMd().format(selectedDate);
 
             widget.docToEdit.reference.update({
               'title': title.text,
               'content': content.text,
               'posttime' : FieldValue.serverTimestamp(),
               'actualdate': selectedDate,
-              'year': dateYear.toString(),
-              'month': dateMonth.toString(),
-              'day': dateDay.toString(),
+              'year': dateYear,
+              'month': dateMonth,
+              'day': dateDay,
               'postimage': image.text,
-            }).whenComplete(() => Navigator.of(context).popUntil(ModalRoute.withName("/screen1")));
+              'searchdate': actualDate,
+            }).whenComplete(() => Navigator.pop(context));
+            Navigator.pop(context);
             // Navigator.pop(context);
             }, child: Text('Save',
             style: TextStyle(
@@ -201,7 +204,7 @@ class _EditPostState extends State<EditPost> {
           ),
 
           FlatButton(onPressed: (){
-            widget.docToEdit.reference.delete().whenComplete(() => Navigator.pop(context) );
+            widget.docToEdit.reference.delete().whenComplete(() => Navigator.pop(context));
             }, child: Text('Delete',
             style: TextStyle(
                 color: Colors.white
@@ -409,7 +412,9 @@ class _EditPostState extends State<EditPost> {
                                                   child: Text('Cancel'),
                                                   onPressed: () {
                                                     setState(() {
+
                                                       Navigator.pop(context);
+
                                                     });
                                                   },
                                                 ),
@@ -419,10 +424,12 @@ class _EditPostState extends State<EditPost> {
                                                   child: Text('Yes'),
                                                   onPressed: () async {
                                                     try {
+                                                         setState(() {
+                                                           image.text = null;
+                                                         });
                                                           widget.docToEdit.reference.update({
                                                             'postimage': null,
                                                           });
-                                                      Navigator.pop(context);
 
                                                       return showDialog(
                                                           context: context,
@@ -438,16 +445,23 @@ class _EditPostState extends State<EditPost> {
                                                                   child: Text('Ok'),
                                                                   onPressed: () {
                                                                     setState(() {
-                                                                      Navigator.push(context, MaterialPageRoute(builder: (_)=>NavigationBar()));
+                                                                      Navigator.pop(context);
+                                                                      Navigator.pop(context);
+                                                                      // pops the two alert dialogues
+                                                                      Navigator.pop(context);
+                                                                      // pops out of edit
                                                                     });
                                                                   },
                                                                 ),
                                                               ],
                                                             );
 
-                                                          });
+                                                          }).whenComplete(() => Navigator.pop(context));
+                                                      // pops out of open and back to daily post/view posts
 
-                                                    } catch (error) {
+                                                    }
+
+                                                    catch (error) {
                                                       print(error.toString());
                                                       return null;
                                                     }

@@ -181,106 +181,112 @@ class _LoginPageState extends State<LoginPage> {
 
                               SizedBox(height: 20.0),
 
-                              Row(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: <Widget>[
+                              Container(
+                                width: width*0.85,
+                                child: Row(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  children: <Widget>[
 
-                                  ButtonTheme(
-                                    minWidth: 125.0,
+                                    ButtonTheme(
+                                      minWidth: 125.0,
 
-                                    height: 40.0,
+                                      height: 40.0,
 
-                                    child: RaisedButton(
+                                      child: RaisedButton(
 
-                                      onPressed: (){
-                                        Navigator.push(context, MaterialPageRoute(builder: (context)=> StartPage()));
-                                      },
-                                      child: Text('BACK',
-                                        style: TextStyle(
-                                          fontSize: 20.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
+                                        onPressed: (){
+                                          Navigator.push(context, MaterialPageRoute(builder: (context)=> StartPage()));
+                                        },
+                                        child: Text('BACK',
+                                          style: TextStyle(
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
                                         ),
+
+                                        color: Colors.blue,
+
                                       ),
-
-                                      color: Colors.blue,
-
                                     ),
-                                  ),
 
-                                  SizedBox(width: 30.0),
+                                    SizedBox(width: 20.0),
 
-                                  ButtonTheme(
-                                    minWidth: 125.0,
-                                    height: 40.0,
+                                    ButtonTheme(
+                                      minWidth: 125.0,
+                                      height: 40.0,
 
-                                    child: RaisedButton(
+                                      child: RaisedButton(
 
-                                      onPressed: () async {
+                                        onPressed: () async {
 
-                                        if (_formKey.currentState.validate()) {
-                                          setState(() => loading = true);
-                                          dynamic result = await _auth.signInWithEmailAndPassword(_email, _password);
-                                          if (result == null) {
-                                            setState(() {
-                                              errormessage = 'Wrong email or password';
-                                              loading = false;
-                                            });
+                                          if (_formKey.currentState.validate()) {
+                                            setState(() => loading = true);
+                                            dynamic result = await _auth.signInWithEmailAndPassword(_email, _password);
+                                            if (result == null) {
+                                              setState(() {
+                                                errormessage = 'Wrong email or password';
+                                                loading = false;
+                                              });
 
-                                            showError(errormessage);
+                                              showError(errormessage);
 
 
+                                            }
                                           }
-                                        }
 
-                                      },
+                                        },
 
 
-                                      child: Text('LOGIN',
-                                        style: TextStyle(
-                                          fontSize: 20.0,
-                                          fontWeight: FontWeight.bold,
-                                          color: Colors.white,
+                                        child: Text('LOGIN',
+                                          style: TextStyle(
+                                            fontSize: 20.0,
+                                            fontWeight: FontWeight.bold,
+                                            color: Colors.white,
+                                          ),
                                         ),
+
+                                        color: Colors.blue,
+
                                       ),
-
-                                      color: Colors.blue,
-
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
 
                               SizedBox(height: 20.0),
 
-                              ButtonTheme(
-                                minWidth: 280.0,
-                                height: 40.0,
+                              Container(
+                               width: width*0.65,
+                                child: ButtonTheme(
+                                  minWidth: 280.0,
+                                  height: 40.0,
 
-                                child: RaisedButton(
-                                  onPressed: () async {
-                                    dynamic result = await _auth.signInAnon();
-                                    if(result == null){
-                                      print('Error signing in');
-                                      } else {
-                                      setState(() {
-                                        errormessage = 'Warning: Cannot save posts online without an account.';
-                                        loading = true;
-                                      });
-                                      print('Signed in');
-                                      print(result.uid);
-                                      }
-                                },
-                                  child: Text('Log in without account',
-                                    style: TextStyle(
-                                      fontSize: 20.0,
-                                      fontWeight: FontWeight.bold,
-                                      color: Colors.white,
+                                  child: RaisedButton(
+                                    onPressed: () async {
+                                      dynamic result = await _auth.signInAnon();
+                                      if(result == null){
+                                        print('Error signing in');
+                                        } else {
+                                        setState(() {
+                                          errormessage = 'Warning: Cannot save posts online without an account.';
+                                          loading = true;
+                                        });
+                                        print('Signed in');
+                                        print(result.uid);
+                                        }
+                                  },
+                                    child: Text('LOG IN WITHOUT ACCOUNT',
+                                      style: TextStyle(
+                                        fontSize: 18.0,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                      ),
                                     ),
+
+                                    color: Colors.blue,
+
                                   ),
-
-                                  color: Colors.blue,
-
                                 ),
                               ),
 

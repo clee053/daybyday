@@ -37,6 +37,9 @@ class _ProfilePageState extends State<ProfilePage> {
   @override
   Widget build(BuildContext context) {
 
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
+
     var useruid = FirebaseAuth.instance.currentUser.uid;
     final userref = FirebaseFirestore.instance.collection('users').doc(useruid);
 
@@ -130,6 +133,7 @@ class _ProfilePageState extends State<ProfilePage> {
           var user = snapshot.data;
           DateTime userDateCreated = user['datecreated'].toDate();
           return Scaffold(
+            resizeToAvoidBottomInset: false,
             appBar: AppBar(
               automaticallyImplyLeading: false,
               title: new Text("Profile"),
@@ -138,8 +142,8 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Column(
                 children: <Widget>[
                   Container(
-                    child: Container(
-                      width: double.infinity,
+
+                      width: width,
                       height: 50.0,
 
 
@@ -176,62 +180,85 @@ class _ProfilePageState extends State<ProfilePage> {
 
                         ),
                       ),
-                    ),
                   ),
 
+                  // Container(
+                  //   child: Container(
+                  //     width: double.infinity,
+                  //     height: 200.0,
+                  //
+                  //     child: Center(
+                  //       child: Column(
+                  //         mainAxisAlignment: MainAxisAlignment.start,
+                  //         crossAxisAlignment: CrossAxisAlignment.center,
+                  //         children: <Widget>[
+                  //           (user['profilepicture'] != null)
+                  //           ? CircleAvatar(
+                  //             radius: 75,
+                  //             backgroundImage: NetworkImage('${user['profilepicture']}'),
+                  //           )
+                  //           : CircleAvatar(
+                  //             radius: 50,
+                  //             backgroundImage: AssetImage('assets/faces/happy.png'),
+                  //           ),
+                  //           SizedBox(height: 10),
+                  //           Text(
+                  //             "${user['name']}",
+                  //             textAlign: TextAlign.left,
+                  //             style: TextStyle(
+                  //               fontSize: 25.0,
+                  //               fontWeight: FontWeight.bold,
+                  //             ),
+                  //           ),
+                  //
+                  //
+                  //         ],
+                  //
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
+
                   Container(
-                    child: Container(
-                      width: double.infinity,
-                      height: 150.0,
+                      width: width,
+                      height: height*1.5,
 
                       child: Center(
                         child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
+                          mainAxisAlignment: MainAxisAlignment.start,
                           crossAxisAlignment: CrossAxisAlignment.center,
                           children: <Widget>[
+
                             (user['profilepicture'] != null)
-                            ? CircleAvatar(
-                              radius: 50,
+                                ? CircleAvatar(
+                              radius: 75,
                               backgroundImage: NetworkImage('${user['profilepicture']}'),
                             )
-                            : CircleAvatar(
-                              radius: 50,
+                                : CircleAvatar(
+                              radius: 75,
                               backgroundImage: AssetImage('assets/faces/happy.png'),
                             ),
                             SizedBox(height: 10),
-                            Text(
-                              "${user['name']}",
-                              textAlign: TextAlign.left,
-                              style: TextStyle(
-                                fontSize: 25.0,
-                                fontWeight: FontWeight.bold,
+                            Container(
+                              width: width*0.8,
+                              child: Text(
+                                "${user['name']}",
+                                textAlign: TextAlign.center,
+                                style: TextStyle(
+                                  fontSize: 25.0,
+                                  fontWeight: FontWeight.bold,
+                                ),
                               ),
                             ),
 
-
-                          ],
-
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  Container(
-                    child: Container(
-                      width: double.infinity,
-                      height: 200.0,
-
-                      child: Center(
-                        child: Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          children: <Widget>[
+                            SizedBox(height: 20),
                             Text(
                               "Joined: ${DateFormat.yMMMd().format(userDateCreated)}",
 
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontSize: 20.0
+                                  fontSize: 20.0,
+                                fontStyle: FontStyle.italic,
                               ),
                             ),
                             // Text(
@@ -259,43 +286,38 @@ class _ProfilePageState extends State<ProfilePage> {
                               height: 20.0,
                             ),
                             (user['status'] != null)
-                                ? Text(
+                                ? Container(
+                              width: width*0.8,
+                                  child: Text(
                               '"${user['status']}"',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontSize: 25.0
+                                    fontSize: 25.0
                               ),
-                            )
-                                : Text(
+                            ),
+                                )
+                                : Container(
+                                  width: width*0.8,
+                                  child: Text(
                               '"Update your status!"',
                               textAlign: TextAlign.center,
                               style: TextStyle(
-                                  fontSize: 25.0
+                                    fontSize: 25.0
                               ),
                             ),
+                                ),
 
-                          ],
+                            SizedBox(
+                              height: 30.0,
+                            ),
 
-                        ),
-                      ),
-                    ),
-                  ),
-
-                  Container(
-                    child: Container(
-                      width: 300.0,
-                      height: 600.0,
-
-                      child: Center(
-                        child: Column(
-                          children: <Widget>[
                             ButtonTheme(
-                              minWidth: 300.0,
+                              minWidth: width*0.8,
                               height: 50.0,
                               buttonColor: Colors.blue[50],
                               child: RaisedButton(
                                 onPressed: ()
-                                  => uploadProfilePicture(),
+                                => uploadProfilePicture(),
                                 child: Text('Change Profile Picture',
                                   style: TextStyle(
                                     fontSize: 20.0,
@@ -309,14 +331,14 @@ class _ProfilePageState extends State<ProfilePage> {
                               height: 10.0,
                             ),
                             ButtonTheme(
-                              minWidth: 300.0,
+                              minWidth: width*0.8,
                               height: 50.0,
                               buttonColor: Colors.blue[50],
                               child: RaisedButton(
                                 onPressed: ()  {
                                   changeName(context);
 
-                                  },
+                                },
                                 child: Text('Change Name',
                                   style: TextStyle(
                                     fontSize: 20.0,
@@ -332,8 +354,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
                             (user['email'] == null)
 
-                            ?ButtonTheme(
-                              minWidth: 300.0,
+                                ?ButtonTheme(
+                              minWidth: width*0.8,
                               height: 50.0,
                               buttonColor: Colors.blue[50],
                               child: RaisedButton(
@@ -363,7 +385,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                               // textColor: Colors.white,
                                               child: Text('Yes'),
                                               onPressed: () async {
-                                               navigateToCreateAccount();
+                                                navigateToCreateAccount();
                                               },
                                             ),
                                           ],
@@ -386,8 +408,8 @@ class _ProfilePageState extends State<ProfilePage> {
 
 
 
-                            : ButtonTheme(
-                              minWidth: 300.0,
+                                : ButtonTheme(
+                              minWidth: width*0.8,
                               height: 50.0,
                               buttonColor: Colors.blue[50],
                               child: RaisedButton(
@@ -473,7 +495,7 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
 
                             ButtonTheme(
-                              minWidth: 300.0,
+                              minWidth: width*0.8,
                               height: 50.0,
                               buttonColor: Colors.blue[50],
                               child: RaisedButton(
@@ -494,13 +516,14 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
 
                             ButtonTheme(
-                              minWidth: 300.0,
+                              minWidth: width*0.8,
                               height: 50.0,
                               buttonColor: Colors.blue[50],
                               child: RaisedButton(
                                 onPressed: () {
                                   Navigator.push(context,
                                     MaterialPageRoute(
+                                        settings: RouteSettings(name: "/screen2"),
                                         builder: (context) => ViewPosts()),
                                   );
                                 },
@@ -518,14 +541,14 @@ class _ProfilePageState extends State<ProfilePage> {
                             ),
 
                             ButtonTheme(
-                              minWidth: 300.0,
+                              minWidth: width*0.8,
                               height: 50.0,
                               buttonColor: Colors.blue[50],
                               child: RaisedButton(
                                 onPressed: () async {
                                   await _auth.signOut();
                                 },
-                                child: Text('Sign out',
+                                child: Text('Sign Out',
                                   style: TextStyle(
                                     fontSize: 20.0,
                                     fontWeight: FontWeight.bold,
@@ -535,12 +558,279 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
 
+
+
+
+
+
                           ],
 
                         ),
                       ),
-                    ),
+
                   ),
+
+                  // Container(
+                  //   child: Container(
+                  //     width: 300.0,
+                  //     height: 600.0,
+                  //
+                  //     child: Center(
+                  //       child: Column(
+                  //         children: <Widget>[
+                  //           ButtonTheme(
+                  //             minWidth: 300.0,
+                  //             height: 50.0,
+                  //             buttonColor: Colors.blue[50],
+                  //             child: RaisedButton(
+                  //               onPressed: ()
+                  //                 => uploadProfilePicture(),
+                  //               child: Text('Change Profile Picture',
+                  //                 style: TextStyle(
+                  //                   fontSize: 20.0,
+                  //                   fontWeight: FontWeight.bold,
+                  //
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ),
+                  //           SizedBox(
+                  //             height: 10.0,
+                  //           ),
+                  //           ButtonTheme(
+                  //             minWidth: 300.0,
+                  //             height: 50.0,
+                  //             buttonColor: Colors.blue[50],
+                  //             child: RaisedButton(
+                  //               onPressed: ()  {
+                  //                 changeName(context);
+                  //
+                  //                 },
+                  //               child: Text('Change Name',
+                  //                 style: TextStyle(
+                  //                   fontSize: 20.0,
+                  //                   fontWeight: FontWeight.bold,
+                  //
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ),
+                  //           SizedBox(
+                  //             height: 10.0,
+                  //           ),
+                  //
+                  //           (user['email'] == null)
+                  //
+                  //           ?ButtonTheme(
+                  //             minWidth: 300.0,
+                  //             height: 50.0,
+                  //             buttonColor: Colors.blue[50],
+                  //             child: RaisedButton(
+                  //               onPressed: ()  {
+                  //                 return showDialog(
+                  //                     context: context,
+                  //                     builder: (context) {
+                  //                       return AlertDialog(
+                  //                         title: Text('Create a new account?'),
+                  //                         content: Text(
+                  //                             'You can save your posts and sign back in any time!'
+                  //                         ),
+                  //
+                  //                         actions: <Widget>[
+                  //                           FlatButton(
+                  //                             // color: Colors.blue[50],
+                  //                             // textColor: Colors.white,
+                  //                             child: Text('Cancel'),
+                  //                             onPressed: () {
+                  //                               setState(() {
+                  //                                 Navigator.pop(context);
+                  //                               });
+                  //                             },
+                  //                           ),
+                  //                           FlatButton(
+                  //                             // color: Colors.blue,
+                  //                             // textColor: Colors.white,
+                  //                             child: Text('Yes'),
+                  //                             onPressed: () async {
+                  //                              navigateToCreateAccount();
+                  //                             },
+                  //                           ),
+                  //                         ],
+                  //                       );
+                  //
+                  //
+                  //
+                  //                     });
+                  //                 // resetPassword(context);
+                  //               },
+                  //               child: Text('Create Account',
+                  //                 style: TextStyle(
+                  //                   fontSize: 20.0,
+                  //                   fontWeight: FontWeight.bold,
+                  //
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           )
+                  //
+                  //
+                  //
+                  //           : ButtonTheme(
+                  //             minWidth: 300.0,
+                  //             height: 50.0,
+                  //             buttonColor: Colors.blue[50],
+                  //             child: RaisedButton(
+                  //               onPressed: ()  {
+                  //                 return showDialog(
+                  //                     context: context,
+                  //                     builder: (context) {
+                  //                       return AlertDialog(
+                  //                         title: Text('Confirm Password Reset?'),
+                  //                         content: Text(
+                  //                             'The password reset link will be emailed to you at ${user['email']}.'
+                  //                         ),
+                  //
+                  //                         actions: <Widget>[
+                  //                           FlatButton(
+                  //                             // color: Colors.blue[50],
+                  //                             // textColor: Colors.white,
+                  //                             child: Text('Cancel'),
+                  //                             onPressed: () {
+                  //                               setState(() {
+                  //                                 Navigator.pop(context);
+                  //                               });
+                  //                             },
+                  //                           ),
+                  //                           FlatButton(
+                  //                             // color: Colors.blue,
+                  //                             // textColor: Colors.white,
+                  //                             child: Text('Yes'),
+                  //                             onPressed: () async {
+                  //                               try {
+                  //                                 final _auth = FirebaseAuth.instance;
+                  //                                 await _auth.sendPasswordResetEmail(email: user['email']);
+                  //                                 Navigator.pop(context);
+                  //
+                  //                                 return showDialog(
+                  //                                     context: context,
+                  //                                     builder: (context) {
+                  //                                       return AlertDialog(
+                  //                                         content: Text(
+                  //                                             'The password reset link has been sent to your email.'
+                  //                                         ),
+                  //                                         actions: <Widget>[
+                  //                                           FlatButton(
+                  //                                             // color: Colors.blue[50],
+                  //                                             // textColor: Colors.white,
+                  //                                             child: Text('Ok!'),
+                  //                                             onPressed: () {
+                  //                                               setState(() {
+                  //                                                 Navigator.pop(context);
+                  //                                               });
+                  //                                             },
+                  //                                           ),
+                  //                                         ],
+                  //                                       );
+                  //
+                  //                                     });
+                  //
+                  //                               } catch (error) {
+                  //                                 print(error.toString());
+                  //                                 return null;
+                  //                               }
+                  //                             },
+                  //                           ),
+                  //                         ],
+                  //                       );
+                  //
+                  //
+                  //
+                  //                     });
+                  //                 // resetPassword(context);
+                  //               },
+                  //               child: Text('Change Password',
+                  //                 style: TextStyle(
+                  //                   fontSize: 20.0,
+                  //                   fontWeight: FontWeight.bold,
+                  //
+                  //                 ),
+                  //               ),
+                  //             ),
+                  //           ),
+                  //           SizedBox(
+                  //             height: 10.0,
+                  //           ),
+                  //
+                  //           ButtonTheme(
+                  //             minWidth: 300.0,
+                  //             height: 50.0,
+                  //             buttonColor: Colors.blue[50],
+                  //             child: RaisedButton(
+                  //               onPressed: () {
+                  //                 updateStatus(context);
+                  //               },
+                  //               child: Text('Change Status',
+                  //                 style: TextStyle(
+                  //                   fontSize: 20.0,
+                  //                   fontWeight: FontWeight.bold,
+                  //                 ),
+                  //               ),
+                  //
+                  //             ),
+                  //           ),
+                  //           SizedBox(
+                  //             height: 10.0,
+                  //           ),
+                  //
+                  //           ButtonTheme(
+                  //             minWidth: 300.0,
+                  //             height: 50.0,
+                  //             buttonColor: Colors.blue[50],
+                  //             child: RaisedButton(
+                  //               onPressed: () {
+                  //                 Navigator.push(context,
+                  //                   MaterialPageRoute(
+                  //                       settings: RouteSettings(name: "/screen2"),
+                  //                       builder: (context) => ViewPosts()),
+                  //                 );
+                  //               },
+                  //               child: Text('View Posts',
+                  //                 style: TextStyle(
+                  //                   fontSize: 20.0,
+                  //                   fontWeight: FontWeight.bold,
+                  //                 ),
+                  //               ),
+                  //
+                  //             ),
+                  //           ),
+                  //           SizedBox(
+                  //             height: 10.0,
+                  //           ),
+                  //
+                  //           ButtonTheme(
+                  //             minWidth: 300.0,
+                  //             height: 50.0,
+                  //             buttonColor: Colors.blue[50],
+                  //             child: RaisedButton(
+                  //               onPressed: () async {
+                  //                 await _auth.signOut();
+                  //               },
+                  //               child: Text('Sign Out',
+                  //                 style: TextStyle(
+                  //                   fontSize: 20.0,
+                  //                   fontWeight: FontWeight.bold,
+                  //                 ),
+                  //               ),
+                  //
+                  //             ),
+                  //           ),
+                  //
+                  //         ],
+                  //
+                  //       ),
+                  //     ),
+                  //   ),
+                  // ),
 
                 ],
               ),

@@ -136,6 +136,7 @@ class AuthService {
     String name;
     String email;
     String imageUrl;
+    String profilepicture;
     var uid;
 
     try {
@@ -153,7 +154,7 @@ class AuthService {
           credential);
       final User user = authResult.user;
 
-      if (user != null) {
+
         assert(!user.isAnonymous);
         assert(await user.getIdToken() != null);
 
@@ -177,7 +178,7 @@ class AuthService {
           name = name.substring(0, name.indexOf(" "));
         }
 
-        if (uid = null) {
+        if (profilepicture == null) {
           _currentUser = UserType(
             uid: authResult.user.uid,
             name: name,
@@ -189,7 +190,7 @@ class AuthService {
               _currentUser);
           return '${authResult.user}';
         }
-      }
+
     }
     catch (error) {
       print(error.toString());
