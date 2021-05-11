@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 
@@ -29,6 +30,7 @@ class _AddDetailPostState extends State<AddDetailPost> {
   TextEditingController _dateController = TextEditingController();
   TextEditingController title = TextEditingController();
   TextEditingController content = TextEditingController();
+  TextEditingController _imageController = TextEditingController();
 
 
   Future<Null> _pickImageCamera() async {
@@ -89,15 +91,13 @@ class _AddDetailPostState extends State<AddDetailPost> {
         ],
         androidUiSettings: AndroidUiSettings(
             toolbarTitle: 'Cropper',
-            toolbarColor: Colors.deepOrange,
+            toolbarColor: Colors.blue,
             toolbarWidgetColor: Colors.white,
             initAspectRatio: CropAspectRatioPreset.original,
             lockAspectRatio: false),
         iosUiSettings: IOSUiSettings(
           title: 'Cropper',
         ));
-
-
       setState(() {
         _imageFile = croppedFile ?? _imageFile;
         //return cropped otherwise return normal image
@@ -109,6 +109,8 @@ class _AddDetailPostState extends State<AddDetailPost> {
     var useruid = FirebaseAuth.instance.currentUser.uid;
     final _storage = FirebaseStorage.instance;
 
+    UploadTask _uploadTask;
+
     var fileUpload = File(_imageFile.path);
 
     if (_imageFile != null) {
@@ -119,13 +121,33 @@ class _AddDetailPostState extends State<AddDetailPost> {
 
       var downloadUrl = await snapshot.ref.getDownloadURL();
 
-      // await FirebaseFirestore.instance.collection("users").doc(useruid).collection('posts').add({'postimage': downloadUrl});
-
       setState(() {
         imageUrl = downloadUrl;
+        _imageController.text = imageUrl;
+
+
+        showFlash(
+          context: context,
+          duration: const Duration(seconds: 2),
+          builder: (context, controller) {
+            return Flash(
+              controller: controller,
+              backgroundColor: Colors.blue,
+              style: FlashStyle.floating,
+              boxShadows: kElevationToShadow[4],
+              horizontalDismissDirection: HorizontalDismissDirection.horizontal,
+              child: FlashBar(
+                message: Text('Image uploaded. Remember to save post!'),
+              ),
+            );
+          },
+        );
       });
     } else {
       print('No Path Received');
+      setState(() {
+        _imageController.text = null;
+      });
     }
   }
 
@@ -140,28 +162,28 @@ class _AddDetailPostState extends State<AddDetailPost> {
     if (picked != null)
       setState(() {
         selectedDate = picked;
-        _dateController.text = DateFormat.yMd().format(selectedDate);
+        _dateController.text = DateFormat.yMMMMd().format(selectedDate);
       });
   }
 
-
-
   @override
   void initState() {
-    _dateController.text = DateFormat.yMd().format(DateTime.now());
+    _dateController.text = DateFormat.yMMMMd().format(DateTime.now());
     super.initState();
   }
 
 
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     String _setDate;
-    dateTime = DateFormat.yMd().format(DateTime.now());
+    dateTime = DateFormat.yMMMMd().format(DateTime.now());
     var dateformat = new DateTime.now().toString();
 
     return Scaffold(
       appBar: AppBar(
-        title: new Text("Add Detailed Post!"),
+        title: new Text("Add Detailed Post"),
         actions: [
           FlatButton(onPressed: () async {
 
@@ -173,32 +195,6 @@ class _AddDetailPostState extends State<AddDetailPost> {
             var dateDay = selectedDate.day.toString();
             var actualDate = DateFormat.yMMMd().format(selectedDate);
 
-
-
-            // final _storage = FirebaseStorage.instance;
-            //
-            // var fileUpload = File(_imageFile.path);
-            //
-            // if (_imageFile != null) {
-            //   //Upload to Firebase
-            //   var snapshot = await _storage.ref()
-            //       .child('$user/post/${DateTime.now()}')
-            //       .putFile(fileUpload);
-            // //
-            //   var downloadUrl = await snapshot.ref.getDownloadURL();
-            //
-            //   // await FirebaseFirestore.instance.collection("users").doc(useruid).collection('posts').add({'profilepicture': downloadUrl});
-            //
-            //   setState(() {
-            //     imageUrl = downloadUrl;
-            //   });
-            //
-            // } else {
-            //
-            //
-            // }
-
-
             //get the current UID, which is already in use, this will help also with the anonymous posts
             data.add({
               'title': title.text,
@@ -208,22 +204,27 @@ class _AddDetailPostState extends State<AddDetailPost> {
               'year': dateYear,
               'month': dateMonth,
               'day': dateDay,
-              'postimage': imageUrl,
+              'postimage': _imageController.text,
               'searchdate': actualDate,
 
             }).whenComplete(() => Navigator.pop(context));
-          }, child: Text('Save')),
+          }, child: Text('Save',
+            style: TextStyle(
+                color: Colors.white
+            ),),
+          ),
         ],
       ),
       body: SingleChildScrollView(
         child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
           children: <Widget>[
 
             Container(
               child: Container(
                 margin: EdgeInsets.all(12),
-                width: double.infinity,
-                height: 150.0,
+                width: width,
+                height: height*0.15,
 
                 child: Center(
                   child: Column(
@@ -268,12 +269,12 @@ class _AddDetailPostState extends State<AddDetailPost> {
 
             Container(
               child: Container(
-                width: double.infinity,
-                height: 400.0,
+                width: width,
+
 
                 child: Center(
                   child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.start,
                     children: <Widget>[
                       Container(
                         margin: EdgeInsets.all(12),
@@ -302,7 +303,7 @@ class _AddDetailPostState extends State<AddDetailPost> {
 
                       Container(
                         margin: EdgeInsets.all(12),
-                        height: maxLines * 50.0,
+                        height: maxLines * 70.0,
 
                         child: TextField(
                           controller: content,
@@ -388,44 +389,45 @@ class _AddDetailPostState extends State<AddDetailPost> {
 
                       SizedBox(height: 20),
 
-                      ButtonTheme(
-                        minWidth: 150.0,
-                        height: 50.0,
-                        buttonColor: Colors.blue[50],
-                        child: RaisedButton(
-                          onPressed: () async {
-                            uploadPicture();
-                          },
+                      SizedBox(
+                        width: width*0.8,
+                        child: ButtonTheme(
+                          height: 50.0,
+                          buttonColor: Colors.blue[50],
+                          child: RaisedButton(
+                            onPressed: () async {
 
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: [
 
-                              Icon(Icons.upload_sharp),
 
-                              Text('Upload Photo',
-                                style: TextStyle(
-                                  fontSize: 20.0,
-                                  fontWeight: FontWeight.bold,
+                              uploadPicture();
 
+
+
+                            },
+
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+
+                                Icon(Icons.upload_sharp),
+
+                                Text('Upload Photo',
+                                  style: TextStyle(
+                                    fontSize: 20.0,
+                                    fontWeight: FontWeight.bold,
+
+                                  ),
                                 ),
-                              ),
 
 
-                            ],
+                              ],
+                            ),
                           ),
                         ),
                       ),
 
                       SizedBox(height: 20),
 
-
-                      // RaisedButton.icon(
-                      //     padding: EdgeInsets.fromLTRB(100, 10, 100, 10),
-                      //     label: Text('Upload image'),
-                      //     icon: Icon(Icons.upload_sharp),
-                      //     onPressed: uploadPicture,
-                      // ),
                     ]
                   ],
                 ),

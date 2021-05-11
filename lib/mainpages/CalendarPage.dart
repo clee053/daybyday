@@ -15,14 +15,10 @@ class CalendarPage extends StatefulWidget {
 class _CalendarPageState extends State<CalendarPage> {
   CalendarController _controller;
   List<dynamic> _selectedEvents;
+  // variable list dynamic for selected events
   Map<DateTime, List<dynamic>> _events;
+  // dynamic list of where this list is the list of events for that day
   TextEditingController _eventController;
-
-
-
-
-  // final AuthService _auth = AuthService();
-  // Event is a map of key DateTime and lists the dynamic list of where this list is the list of events for that day
 
 
   @override
@@ -35,43 +31,36 @@ class _CalendarPageState extends State<CalendarPage> {
 
 
     _events = {
-
-      // _selectedDay: [
-      //
-      //   'Event B0',
-      //   'Event C0'
-      // ],
     };
     _selectedEvents = [];
   }
 
-  Map<DateTime, dynamic> _groupEvents(List<Post> allEvents) {
-    Map<DateTime, dynamic> data = {};
-    allEvents.forEach((event) {
-      DateTime date = DateTime(
-          event.actualdate.year, event.actualdate.month, event.actualdate.day, 12);
-      if (data[date] == null) data[date] = [];
-      data[date].add(event);
+  // Map<DateTime, dynamic> _groupEvents(List<Post> allEvents) {
+  //   Map<DateTime, dynamic> data = {};
+  //   allEvents.forEach((event) {
+  //     DateTime date = DateTime(
+  //         event.actualdate.year, event.actualdate.month, event.actualdate.day, 12);
+  //     if (data[date] == null) data[date] = [];
+  //     data[date].add(event);
+  //   });
+  //   return data;
+  // }
+
+  Map<String, dynamic> encodeMap(Map<DateTime, dynamic> map) {
+    Map<String, dynamic> newMap = {};
+    map.forEach((key, value) {
+      newMap[key.toString()] = map[key];
     });
-    return data;
+    return newMap;
+  }
+  Map<DateTime, dynamic> decodeMap(Map<String, dynamic> map) {
+    Map<DateTime, dynamic> newMap = {};
+    map.forEach((key, value) {
+      newMap[DateTime.parse(key)] = map[key];
+    });
+    return newMap;
   }
 
-
-  // Map<String, dynamic> encodeMap(Map<DateTime, dynamic> map) {
-  //   Map<String, dynamic> newMap = {};
-  //   map.forEach((key, value) {
-  //     newMap[key.toString()] = map[key];
-  //   });
-  //   return newMap;
-  // }
-  //
-  // Map<DateTime, dynamic> decodeMap(Map<String, dynamic> map) {
-  //   Map<DateTime, dynamic> newMap = {};
-  //   map.forEach((key, value) {
-  //     newMap[DateTime.parse(key)] = map[key];
-  //   });
-  //   return newMap;
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -92,40 +81,29 @@ class _CalendarPageState extends State<CalendarPage> {
 
           },
         ),
-      // body: StreamBuilder(
-      //   stream: dateref.snapshots(),
-      //   builder: (context, snapshot) {
-      //
-      //       return ListView.builder(
-      //           itemCount: snapshot.hasData?snapshot.data.docs.length: 0,
-      //           itemBuilder: (_, index){
-      //           DateTime myDateTime = (snapshot.data.docs[index].data()['posttime']).toDate();
-      //           });
-
-
 
           body: StreamBuilder(
             stream: dateref.snapshots(),
             builder: (context, snapshot)
             {
-              var post = snapshot.data;
-              if (snapshot.hasData) {
-                final List<DocumentSnapshot> documents = snapshot.data.docs;
-                  _events = {
-                    _selectedDay: [
-                      documents.map((doc) => Card(
-                              child: ListTile(
-                                title: Text(doc['title']),
-                              ),))
-                      // '${post['title']}'
-                    ],
-
-                  };
-                  _selectedEvents = [
-
-                    // '${post['title']}'
-                  ];
-                }
+              // var post = snapshot.data;
+              // if (snapshot.hasData) {
+              //   final List<DocumentSnapshot> documents = snapshot.data.docs;
+              //     _events = {
+              //       _selectedDay: [
+              //         documents.map((doc) => Card(
+              //                 child: ListTile(
+              //                   title: Text(doc['title']),
+              //                 ),))
+              //         // '${post['title']}'
+              //       ],
+              //
+              //     };
+              //     _selectedEvents = [
+              //
+              //       // '${post['title']}'
+              //     ];
+              //   }
 
               // if (snapshot.hasData) {
               //   // <3> Retrieve `List<DocumentSnapshot>` from snapshot
@@ -174,23 +152,10 @@ class _CalendarPageState extends State<CalendarPage> {
                       onDaySelected: (date, events, holidays)  {
                         setState(()  {
                           _selectedEvents = events;
-                          // if (snapshot.hasData) {
-                          //   // <3> Retrieve `List<DocumentSnapshot>` from snapshot
-                          //   final List<DocumentSnapshot> documents = snapshot.data.docs;
-                          //   return ListView(
-                          //       children: documents
-                          //           .map((doc) => Card(
-                          //         child: ListTile(
-                          //           title: Text(doc['title']),
-                          //         ),
-                          //       ))
-                          //           .toList());
-                          // }
                         });
                       },
 
                       // day selected will add the event
-
                       // In TableCalendar, let us assign events as underscore events.
                       // Whenever the day is selected, set state,
                       // so interval calendar on the day selected property.
@@ -198,30 +163,21 @@ class _CalendarPageState extends State<CalendarPage> {
               ),
 
                   ),
-                   ... _selectedEvents.map((event) => ListTile(
+                  ..._selectedEvents.map((event) => Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: Card(
 
-                    title: Text(event),
+                      child: Padding(
+                        padding: const EdgeInsets.all(10.0),
+                        child: Center(
+                            child: Text(event,
+                              style: TextStyle(color: Colors.blue,
+                                  fontWeight: FontWeight.bold,fontSize: 16),)
+                        ),
+                      ),
+                    ),
                   )),
                   // lists the event title out
-
-
-
-                  // RaisedButton(
-                  //   onPressed: () async {
-                  //     await _auth.signOut();
-                  //   },
-                  //   child: Text('Sign out',
-                  //     style: TextStyle(
-                  //       fontSize: 20.0,
-                  //       fontWeight: FontWeight.bold,
-                  //     ),
-                  //   ),
-                  //
-                  // ),
-
-
-
-
 
                 ],
             ),

@@ -1,11 +1,9 @@
-// import 'package:firebase_auth/firebase_auth.dart';
+
 import 'dart:io';
-
-
-import 'package:daybyday/navigation/NavigationBar.dart';
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:flash/flash.dart';
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/widgets.dart';
@@ -130,12 +128,32 @@ class _EditPostState extends State<EditPost> {
 
       setState(() {
         imageUrl = downloadUrl;
-        image.text = downloadUrl;
+        image.text = imageUrl;
+        showFlash(
+          context: context,
+          duration: const Duration(seconds: 2),
+          builder: (context, controller) {
+            return Flash(
+              controller: controller,
+              backgroundColor: Colors.blue,
+              style: FlashStyle.floating,
+              boxShadows: kElevationToShadow[4],
+              horizontalDismissDirection: HorizontalDismissDirection.horizontal,
+              child: FlashBar(
+                message: Text('Image uploaded. Remember to save post!'),
+              ),
+            );
+          },
+        );
       });
     } else {
       print('No Path Received');
+      setState(() {
+        image.text = null;
+      });
     }
   }
+
 
 
 
@@ -149,7 +167,7 @@ class _EditPostState extends State<EditPost> {
     if (picked != null)
       setState(() {
         selectedDate = picked;
-        _dateController.text = DateFormat.yMd().format(selectedDate);
+        _dateController.text = DateFormat.yMMMMd().format(selectedDate);
       });
   }
 
@@ -158,7 +176,7 @@ class _EditPostState extends State<EditPost> {
   void initState(){
     title = TextEditingController(text: widget.docToEdit.data()['title']);
     content = TextEditingController(text: widget.docToEdit.data()['content']);
-    _dateController.text = DateFormat.yMd().format(widget.docToEdit.data()['actualdate'].toDate());
+    _dateController.text = DateFormat.yMMMMd().format(widget.docToEdit.data()['actualdate'].toDate());
     image = TextEditingController(text: widget.docToEdit.data()['postimage']);
     super.initState();
   }
@@ -196,7 +214,6 @@ class _EditPostState extends State<EditPost> {
               'searchdate': actualDate,
             }).whenComplete(() => Navigator.pop(context));
             Navigator.pop(context);
-            // Navigator.pop(context);
             }, child: Text('Save',
             style: TextStyle(
                 color: Colors.white
@@ -204,12 +221,47 @@ class _EditPostState extends State<EditPost> {
           ),
 
           FlatButton(onPressed: (){
-            widget.docToEdit.reference.delete().whenComplete(() => Navigator.pop(context));
-            }, child: Text('Delete',
+
+            return showDialog(
+                context: context,
+                builder: (context) {
+                  return AlertDialog(
+                    title: Text('Delete post?'),
+                    content: Text(
+                        'This post will be deleted permanently.'
+                    ),
+
+                    actions: <Widget>[
+                      FlatButton(
+                        child: Text('Cancel'),
+                        onPressed: () {
+                          setState(() {
+
+                            Navigator.pop(context);
+
+                          });
+                        },
+                      ),
+                      FlatButton(
+                        child: Text('Yes'),
+                        onPressed: () async {
+                          widget.docToEdit.reference.delete().whenComplete(() => Navigator.pop(context));
+                          Navigator.pop(context);
+                        },
+                      ),
+                    ],
+                  );
+
+
+
+                });
+
+          }, child: Text('Delete',
             style: TextStyle(
                 color: Colors.white
             ),),
           ),
+
         ],
 
       ),
@@ -350,7 +402,7 @@ class _EditPostState extends State<EditPost> {
                           ),
 
                           SizedBox(
-                            height: 10,
+                            height: 20,
                           ),
 
                           Row(
@@ -359,42 +411,38 @@ class _EditPostState extends State<EditPost> {
                             children: [
 
                          
-                                RaisedButton.icon(
-                                  onPressed: () => _pickImageCamera(),
-                                  label: Flexible(
-                                    child: Text('Take a photo', overflow: TextOverflow.clip,
-                                        ),
-                                  ),
-                                  icon: Icon(Icons.photo_camera),
-                                    padding: EdgeInsets.fromLTRB(5, 10, 5, 10)
+                                Flexible(
+                                  child: RaisedButton.icon(
+                                    onPressed: () => _pickImageCamera(),
+                                    label: Flexible(
+                                      child: Text('Take a photo', overflow: TextOverflow.clip,
+                                          ),
+                                    ),
+                                    icon: Icon(Icons.photo_camera),
+                                      padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
 
+                                  ),
                                 ),
 
-                              SizedBox(width: 20),
+                              SizedBox(width: 15),
 
                               Flexible(
                                 child: RaisedButton.icon(
                                   onPressed: () => _pickImageGallery(),
-                                  label: Text('From gallery', overflow: TextOverflow.clip,),
+                                  label: Flexible(child: Text('From gallery', overflow: TextOverflow.clip,)),
                                   icon: Icon(Icons.photo_album),
                                   padding: EdgeInsets.fromLTRB(5, 10, 5, 10)
                                 ),
                               ),
 
-                              SizedBox(width: 20),
+                              SizedBox(width: 15),
 
                               Flexible(
                                 child: RaisedButton.icon(
-                                    label: Text('Delete photo', overflow: TextOverflow.clip,),
+                                    label: Flexible(child: Text('Delete photo', overflow: TextOverflow.clip,)),
                                     icon: Icon(Icons.delete),
-                                    padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
+                                     padding: EdgeInsets.fromLTRB(5, 10, 5, 10),
                                     onPressed: ()  {
-                                      // setState(() {
-                                      //   image.text = null;
-                                      // });
-                                      // widget.docToEdit.reference.update({
-                                      //   'postimage': null,
-                                      // });
 
                                       return showDialog(
                                           context: context,
@@ -425,10 +473,10 @@ class _EditPostState extends State<EditPost> {
                                                   onPressed: () async {
                                                     try {
                                                          setState(() {
-                                                           image.text = null;
+                                                           image.text = "";
                                                          });
                                                           widget.docToEdit.reference.update({
-                                                            'postimage': null,
+                                                            'postimage': "",
                                                           });
 
                                                       return showDialog(

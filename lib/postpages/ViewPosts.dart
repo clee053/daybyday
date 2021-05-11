@@ -1,4 +1,5 @@
 
+import 'package:daybyday/navigation/NavigationBar.dart';
 import 'package:daybyday/postpages/OpenPost.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -8,7 +9,7 @@ import 'EditPost.dart';
 import 'package:intl/intl.dart';
 
 class ViewPosts extends StatefulWidget {
-  // get docindex => null;
+
 
 
 
@@ -20,119 +21,90 @@ class _ViewPostsState extends State<ViewPosts> {
 
   @override
   Widget build(BuildContext context) {
-
-    // var docindex;
+    double height = MediaQuery
+        .of(context)
+        .size
+        .height;
 
     var useruid = FirebaseAuth.instance.currentUser.uid;
-    final postref = FirebaseFirestore.instance.collection('users').doc(useruid).collection('posts');
+    final postref = FirebaseFirestore.instance.collection('users')
+        .doc(useruid)
+        .collection('posts');
 
-    final view = postref.orderBy("actualdate",
-        descending: true);
-//  note: changed descending = true (originally false) in the parameter query.dart so that I can use ascending!
+
+
+
+
+    final view = postref.orderBy('actualdate', descending: true);
+
+    // final docRef = postref.where('year');
 
 
     return Scaffold(
       appBar: AppBar(
-        title: new Text("View Posts"),),
-      floatingActionButton: FloatingActionButton(
-        child: Icon(Icons.add),
-        onPressed: (){
-          Navigator.push(context, MaterialPageRoute(builder: (_)=> AddNewPostPage()));
-        },
+        title: new Text("View Recent Posts"),
+
+
       ),
+
       body: StreamBuilder(
         stream: view.snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
-
-          return ListView.builder(
-//            child: GridView.builder(gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(crossAxisCount: 1),
-                itemCount: snapshot.hasData?snapshot.data.docs.length: 0,
-
-
-//              show all posts. if there are no posts, it will show 0
-                itemBuilder: (_, index){
-                  DateTime myDateTime = (snapshot.data.docs[index].data()['actualdate']).toDate();
-                  // setState(() {
-                  //   docindex = index;
-                  // });
+          return Container(
+            height: height,
+            child: Column(
+              children: [
 
 
+                Expanded(
+                  child: ListView.builder(
+                      itemCount: snapshot.hasData
+                          ? snapshot.data.docs.length
+                          : 0,
+                      itemBuilder: (BuildContext context, int index) {
+                        DocumentSnapshot post = snapshot.data.docs[index];
+                        DateTime myDateTime = (snapshot.data.docs[index]
+                            .data()['actualdate']).toDate();
 
-              return GestureDetector(
-                onTap: (){
-                  Navigator.push(context, MaterialPageRoute(
-                      settings: RouteSettings(name: "/screen3"),
+                        if (!snapshot.hasData || snapshot.data.docs.isEmpty) {
+                          return Center(child: Text('No items found'));
+                        }
 
-                      builder: (_)=>OpenPost(docToOpen: snapshot.data.docs[index],)));
-                },
+                        return SingleChildScrollView(
+                          child: GestureDetector(
+                            onTap: () {
+                              Navigator.push(context, MaterialPageRoute(
+                                // settings: RouteSettings(name: "/screen3"),
+                                  builder: (_) =>
+                                      OpenPost(
+                                        docToOpen: snapshot.data
+                                            .docs[index],)));
+                            },
 
-
-                child: Container(
-                 margin: EdgeInsets.all(15),
-                  width: 300,
-                  height: 400,
-
-
-                  decoration: BoxDecoration(
-                    image: DecorationImage(
-                      image: snapshot.data.docs[index].data()['postimage'] != null ? NetworkImage(snapshot.data.docs[index].data()['postimage']) : AssetImage('assets/somin.png'),
-                      fit: BoxFit.cover,
-                      colorFilter:
-                      ColorFilter.mode(Colors.black.withOpacity(0.5),
-                          BlendMode.dstATop),
-                    ),
-                  ),
-
-
-                  child: SingleChildScrollView(
-                    child: Column(
-
-                      children: [
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Flexible(
-                            fit: FlexFit.loose,
-                            child: Padding(
-                              padding: const EdgeInsets.all(20),
-                              child: Text(snapshot.data.docs[index].data()['title'],
-                                    style: TextStyle(
-                                        fontWeight: FontWeight.bold,
-                                        fontSize: 25.0,
-                                          ),),),
+                            child: Card(
+                              child: Padding(
+                                padding: const EdgeInsets.fromLTRB(
+                                    20, 20, 20, 20),
+                                child: Column(
+                                  children: [
+                                    Text(DateFormat.yMMMd().format(
+                                        myDateTime)),
+                                  ],
+                                ),),
+                            ),
                           ),
-                          Flexible(
-                            fit: FlexFit.loose,
-                            child: Padding(
-                              padding: const EdgeInsets.all(10),
-                              child: Text(DateFormat.yMMMd().format(myDateTime),
-                                style: TextStyle(
-                                  fontWeight: FontWeight.bold,
-                                  fontSize: 15.0,
-                                ),),),
-                          ),
-
-                        ],
-                      ),
-
-                      Padding(
-                        padding: const EdgeInsets.fromLTRB(20,10,20,10),
-                        child: Text(snapshot.data.docs[index].data()['content']),),
-
-                        // if (snapshot.data.docs[index].data()['postimage'] != null)
-                        //   Image.network(
-                        //     snapshot.data.docs[index].data()['postimage']),
-                      ],
-                    ),
-                  ),
+                        );
+                      }),
                 ),
-              );
-                });
-//          );
-        }
+              ],
+            ),
+          );
+        },
       ),
 
-      
+
     );
   }
 }
+
+

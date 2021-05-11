@@ -21,7 +21,7 @@ class _AddNewPostPageState extends State<AddNewPostPage> {
   TextEditingController _dateController = TextEditingController();
   TextEditingController title = TextEditingController();
   TextEditingController content = TextEditingController();
-
+  TextEditingController image = TextEditingController();
 
 
 
@@ -35,7 +35,7 @@ class _AddNewPostPageState extends State<AddNewPostPage> {
     if (picked != null)
       setState(() {
         selectedDate = picked;
-        _dateController.text = DateFormat.yMd().format(selectedDate);
+        _dateController.text = DateFormat.yMMMMd().format(selectedDate);
       });
   }
 
@@ -43,20 +43,24 @@ class _AddNewPostPageState extends State<AddNewPostPage> {
 
   @override
   void initState() {
-    _dateController.text = DateFormat.yMd().format(DateTime.now());
+    _dateController.text = DateFormat.yMMMMd().format(DateTime.now());
     super.initState();
   }
 
 
+
+
   @override
   Widget build(BuildContext context) {
+    double height = MediaQuery.of(context).size.height;
+    double width = MediaQuery.of(context).size.width;
     String _setDate;
-    dateTime = DateFormat.yMd().format(DateTime.now());
+    dateTime = DateFormat.yMMMMd().format(DateTime.now());
     var dateformat = new DateTime.now().toString();
 
     return Scaffold(
       appBar: AppBar(
-        title: new Text("Add New Post!"),
+        title: new Text("Add New Post"),
         actions: [
           FlatButton(onPressed: () {
 
@@ -68,7 +72,6 @@ class _AddNewPostPageState extends State<AddNewPostPage> {
             var dateDay = selectedDate.day.toString();
             var actualDate = DateFormat.yMMMd().format(selectedDate);
 
-
             //get the current UID, which is already in use, this will help also with the anonymous posts
             data.add({
               'title': title.text,
@@ -78,21 +81,17 @@ class _AddNewPostPageState extends State<AddNewPostPage> {
               'year': dateYear,
               'month': dateMonth,
               'day': dateDay,
+              'postimage': image.text,
               'searchdate': actualDate,
 
             }
+).whenComplete(() => Navigator.pop(context));
 
-
-
-
-
-
-
-
-
-
-            ).whenComplete(() => Navigator.pop(context));
-          }, child: Text('Save')),
+          }, child: Text('Save',
+            style: TextStyle(
+                color: Colors.white
+            ),),
+          ),
         ],
       ),
       body: SingleChildScrollView(
@@ -102,8 +101,8 @@ class _AddNewPostPageState extends State<AddNewPostPage> {
             Container(
               child: Container(
                 margin: EdgeInsets.all(12),
-                width: double.infinity,
-                height: 150.0,
+                width: width,
+                height: height*0.2,
 
                 child: Center(
                   child: Column(
@@ -148,12 +147,12 @@ class _AddNewPostPageState extends State<AddNewPostPage> {
 
               Container(
                 child: Container(
-                width: double.infinity,
-                height: 400.0,
+                width: width,
+
 
                   child: Center(
                       child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
+                      mainAxisAlignment: MainAxisAlignment.start,
                       children: <Widget>[
                          Container(
                             margin: EdgeInsets.all(12),
@@ -182,7 +181,7 @@ class _AddNewPostPageState extends State<AddNewPostPage> {
 
                         Container(
                           margin: EdgeInsets.all(12),
-                          height: maxLines * 50.0,
+                          height: maxLines * 70.0,
 
                           child: TextField(
                             controller: content,

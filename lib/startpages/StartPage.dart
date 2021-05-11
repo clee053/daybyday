@@ -1,5 +1,6 @@
 import 'package:daybyday/services/auth.dart';
 import 'package:daybyday/shared/loading.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_signin_button/flutter_signin_button.dart';
 import 'package:daybyday/startpages/SignUpPage.dart';
@@ -49,20 +50,23 @@ class _StartPageState extends State<StartPage> {
                 child: Center(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.center,
                     children: <Widget>[
 
-                      SizedBox(height: 50.0),
+
                       Container(
-                        child: Image (image: AssetImage('assets/applogo.png'),height: 300,),
+                        child: Image (image: AssetImage('assets/applogo.png'),height: height*0.4,),
                       ),
-                      SizedBox(height: 20.0),
+
+                      SizedBox( height: 30),
+
 
                       Text(
-                        "Welcome to ",
+                        "welcome to",
                         style: TextStyle(
-                            fontSize: 30.0,
+                            fontSize: 25.0,
                             fontWeight: FontWeight.bold,
-                            color: Colors.black
+                            color: Colors.black87,
                         ),
                       ),
 
@@ -70,7 +74,7 @@ class _StartPageState extends State<StartPage> {
                       Text (
                         "day by day",
                         style: TextStyle(
-                            fontSize: 40.0,
+                            fontSize: 50.0,
                             fontWeight: FontWeight.bold,
                             fontStyle: FontStyle.italic,
                             color: Colors.blue
@@ -80,73 +84,65 @@ class _StartPageState extends State<StartPage> {
 
 
 
-                      SizedBox(height: 50.0),
+                      SizedBox(height: 30.0),
+
+
 
                       Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: <Widget>[
-                          RaisedButton(
-                            padding: EdgeInsets.only(left:30, right:30),
-                            onPressed: navigateToLogin,
-                            child: Text('LOGIN',
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+
+                          SizedBox(width: width*0.1),
+
+                          SizedBox(
+                            width: width*0.35,
+                            child: RaisedButton(
+                              padding: EdgeInsets.all(10),
+                              onPressed: navigateToLogin,
+                              child: Text('LOGIN',
+                                style: TextStyle(
+                                  fontSize: 25.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+
                               ),
+
+                              color: Colors.blue,
+
                             ),
-
-                            color: Colors.blue,
-
                           ),
 
-                          SizedBox(width: 30.0),
+                          SizedBox(width: width*0.1),
 
-                          RaisedButton(
-                            padding: EdgeInsets.only(left:25, right:25),
-                            onPressed: navigateToSignUp,
-                            child: Text('SIGN UP',
-                              style: TextStyle(
-                                fontSize: 20.0,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
+                          SizedBox(
+                            width: width*0.35,
+                            child: RaisedButton(
+                              padding: EdgeInsets.all(10),
+                              onPressed: navigateToSignUp,
+                              child: Text('SIGN UP',
+                                style: TextStyle(
+                                  fontSize: 25.0,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
                               ),
+
+                              color: Colors.blue,
+
                             ),
-
-                            color: Colors.blue,
-
                           ),
+
+                          SizedBox(width: width*0.1),
+
+
 
                         ],
                       ),
 
-                      SizedBox(height: 30.0),
 
-                      Container(
-                        child: SignInButton(
-                          Buttons.GoogleDark,
-                          text: "Sign in with Google",
-                          padding: EdgeInsets.fromLTRB(25, 5, 25, 5),
-                          onPressed: () async {
 
-                            dynamic result = await _auth.signInWithGoogle();
-                            setState(() {
-                              loading = true;
-                            });
-                            if(result == null){
-                              print('Error signing in');
-                            } else {
-                              setState(() {
-                                errormessage = 'Cannot log in with Google. Please try again later.';
-                                loading = false;
-                              });
-                              print('Signed in');
-                              print(result.uid);
-                            }
 
-                          },
-                        ),
-                      ),
 
 
 

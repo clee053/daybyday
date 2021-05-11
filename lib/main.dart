@@ -1,11 +1,7 @@
 
-import 'package:daybyday/mainpages/AllPosts.dart';
 import 'package:daybyday/models/user.dart';
-import 'package:daybyday/postpages/EditPost.dart';
-import 'package:daybyday/postpages/OpenPost.dart';
-import 'package:daybyday/postpages/ViewPosts.dart';
 import 'package:daybyday/services/auth.dart';
-import 'package:daybyday/viewposts/DailyPosts.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:provider/provider.dart';
@@ -14,12 +10,14 @@ import 'wrapper.dart';
 
 
 void main() async {
+  FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(MyApp());
 }
 
 class MyApp extends StatelessWidget {
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {

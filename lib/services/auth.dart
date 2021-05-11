@@ -3,6 +3,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:daybyday/services/database.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:daybyday/models/user.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 
 class AuthService {
@@ -24,30 +25,13 @@ class AuthService {
   // auth change user stream
   Stream<UserType> get user {
     return _auth.authStateChanges()
-    //.map((FirebaseUser user) => _userFromFirebaseUser(user));
         .map(_userFromFirebaseUser);
   }
-
-  // // GET UID
-  // Future<String> getCurrentUID() async {
-  //   return (await _auth.currentUser).uid;
-  // }
-  //
-  // // GET CURRENT USER
-  // Future getCurrentUser() async {
-  //   return await _auth.currentUser;
-  // }
-  //
-
-
 
   // sign in anon
   Future signInAnon() async {
     try {
       UserCredential result = await _auth.signInAnonymously();
-      // User user = result.user;
-      // return _userFromFirebaseUser(user);
-
       _currentUser = UserType(
         uid: result.user.uid,
         email: null,
@@ -70,15 +54,6 @@ class AuthService {
       final currentuid = await FirebaseAuth.instance.currentUser.uid;
       final credential = EmailAuthProvider.credential(email: email, password: password);
 
-
-      // _currentUser = UserType(
-      //     uid: currentuid,
-      //     email: email,
-      //     name: name,
-      //     datecreated: Timestamp.now(),
-
-
-      // );
       await FirebaseAuth.instance.currentUser.linkWithCredential(credential);
       // await DatabaseService(uid: currentuid).createUser(_currentUser);
 
@@ -92,7 +67,8 @@ class AuthService {
 
   Future signInWithEmailAndPassword(String email, String password) async {
     try {
-      UserCredential result = await _auth.signInWithEmailAndPassword(email: email, password: password);
+      UserCredential result = await
+      _auth.signInWithEmailAndPassword(email: email, password: password);
       return result.user;
     } catch (error) {
       print(error.toString());
@@ -107,12 +83,6 @@ class AuthService {
     try {
       UserCredential result = await _auth.createUserWithEmailAndPassword(email: email, password: password);
       // create a new user
-
-      // get the user back with uid from firebase
-
-//      await DatabaseService(uid: user.uid).updateUserData('new user', 100);
-      // passing in dummy data for the new user as a set up
-
       _currentUser = UserType(
         uid: result.user.uid,
         email: email,
@@ -137,6 +107,7 @@ class AuthService {
     String email;
     String imageUrl;
     String profilepicture;
+    Timestamp datecreated;
     var uid;
 
     try {
@@ -154,7 +125,7 @@ class AuthService {
           credential);
       final User user = authResult.user;
 
-
+      if (user.metadata.creationTime == Timestamp.now().toDate()) {
         assert(!user.isAnonymous);
         assert(await user.getIdToken() != null);
 
@@ -172,13 +143,15 @@ class AuthService {
         email = user.email;
         imageUrl = user.photoURL;
         uid = user.uid;
+        datecreated = Timestamp.now();
 
         // Only taking the first part of the name, i.e., First Name
         if (name.contains(" ")) {
           name = name.substring(0, name.indexOf(" "));
         }
 
-        if (profilepicture == null) {
+      // if (user != null) {
+
           _currentUser = UserType(
             uid: authResult.user.uid,
             name: name,
@@ -190,6 +163,7 @@ class AuthService {
               _currentUser);
           return '${authResult.user}';
         }
+      // }
 
     }
     catch (error) {

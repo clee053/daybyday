@@ -76,14 +76,16 @@ class _HomePageState extends State<HomePage> {
     double height = MediaQuery.of(context).size.height;
     double width = MediaQuery.of(context).size.width;
 
-    var useruid = FirebaseAuth.instance.currentUser.uid;
-    final userref = FirebaseFirestore.instance.collection('users').doc(useruid);
-
     DateTime now = new DateTime.now();
     final DateFormat formatterdate = DateFormat('yMMMMd');
     final DateFormat formattertime = DateFormat('jm');
     final String formatdate = formatterdate.format(now);
     final String formattime = formattertime.format(now);
+
+
+    var useruid = FirebaseAuth.instance.currentUser.uid;
+    final userref = FirebaseFirestore.instance.collection('users').doc(useruid);
+
 
     return StreamBuilder(
         stream: userref.snapshots(),

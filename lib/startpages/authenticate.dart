@@ -41,16 +41,16 @@ checkAuthentification() async
 
   @override
   Widget build(BuildContext context) {
-    final user = Provider.of<UserType>(context);
-    print (user);
-    // TODO: implement build
+  // TODO: implement build
 //    throw UnimplementedError();
-  this.checkAuthentification();
+  checkAuthentification();
   return Container(width: 0.0, height: 0.0);
 
 
-
   }
+
+  // final user = Provider.of<UserType>(context);
+  // print (user);
 
 //  @override
 //  Widget build(BuildContext context) {

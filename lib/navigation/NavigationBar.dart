@@ -34,14 +34,11 @@ class _NavigationBarState extends State<NavigationBar> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: _children[_currentIndex],
-
       bottomNavigationBar: BottomNavigationBar(
-
         type: BottomNavigationBarType.fixed,
         onTap: onTappedBar,
         currentIndex: _currentIndex,
         items: [
-
           BottomNavigationBarItem(
             icon:  Icon(Icons.home),
             label: 'Home',
@@ -57,7 +54,6 @@ class _NavigationBarState extends State<NavigationBar> {
           BottomNavigationBarItem(
             icon: Icon(Icons.person),
             label: 'Profile',
-
           ),
         ],
       ) ,

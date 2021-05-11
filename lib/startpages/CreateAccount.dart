@@ -108,7 +108,7 @@ class _CreateAccountState extends State<CreateAccount> {
               Container(
                 child: Container(
                   width: double.infinity,
-                  height: 300.0,
+
 
                   child: Center(
                     child: Column(
@@ -120,6 +120,14 @@ class _CreateAccountState extends State<CreateAccount> {
                           child: Image (image: AssetImage('assets/applogo.png'),height: 230,),
                         ),
                         SizedBox(height: 20.0),
+
+                        Text('create account',
+                          style: TextStyle(
+                            fontSize: 40,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue,
+                          ),
+                        ),
 
                       ],
                     ),

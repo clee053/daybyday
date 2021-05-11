@@ -1,5 +1,5 @@
 name: daybyday
-description: A new Flutter application.
+description: A new Flutter application for diary and journal writing.
 
 # The following line prevents the package from being accidentally published to
 # pub.dev using `pub publish`. This is preferred for private packages.
@@ -24,30 +24,37 @@ dependencies:
   table_calendar: ^2.3.3
   intl: ^0.16.1
   flutter_signin_button: ^1.1.0
-  
+  #firebase dependencies:
   firebase_core: ^0.5.3
   firebase_auth: ^0.18.4+1
   cloud_firestore: ^0.14.4
   firebase_storage: ^5.2.0
+  firebase_messaging: ^7.0.3
+
   provider: ^4.3.2+4
   flutter_spinkit: ^4.1.2+1
   image_picker: ^0.6.7+22
   permission_handler: ^5.0.1+1
   image_cropper: ^1.3.1
   google_sign_in: ^4.5.9
-  firebase_messaging: ^7.0.3
+  flutter_launcher_icons: ^0.8.0
+  flash: ^1.3.0
+  http: ^0.12.2
+  share: any
+  path_provider: ^1.6.28
+  image_downloader: ^0.20.1
 
-#  syncfusion_flutter_calendar: ^18.4.43
-
-
-#  flutter_datetime_picker: ^1.5.0
-
-#  random_string: ^2.1.0
 
 
   flutter:
     sdk: flutter
 
+
+#for app icon
+flutter_icons:
+  android: true
+  ios: true
+  image_path: "assets/appicon.jpg"
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -71,14 +78,15 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/applogo.png
-    - assets/somin.png
+    - assets/appicon.jpg
     - assets/background.png
     - assets/faces/happy.png
     - assets/faces/angry.png
     - assets/faces/normal.png
     - assets/faces/sad.png
     - assets/faces/shock.png
-  #   - images/a_dot_ham.jpeg
+    - assets/blue.png
+
 
 
   # An image asset can refer to one or more resolution-specific "variants", see

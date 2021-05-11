@@ -1,15 +1,10 @@
-
+import 'package:flutter/material.dart';
 import 'package:daybyday/startpages/StartPage.dart';
 import 'package:daybyday/startpages/authenticate.dart';
-
-import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import 'models/user.dart';
 
 class Wrapper extends StatelessWidget {
-
-
   @override
   Widget build(BuildContext context) {
 //    Returns data from currentuser through stream

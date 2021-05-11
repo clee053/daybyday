@@ -26,6 +26,8 @@
 	<string>Permission to Access Camera</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>Permission to Access Gallery</string>
+	<key>NSPhotoLibraryAddUsageDescription</key>
+    <string>Permission to Add Photos to Gallery</string>
 	<key>UIBackgroundModes</key>
 	<array>
 		<string>fetch</string>
